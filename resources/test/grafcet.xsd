@@ -1,0 +1,113 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="action" type="xs:string"/>
+  <xs:element name="actions">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element ref="action" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute type="xs:int" name="num" use="optional"/>
+      <xs:attribute type="xs:int" name="x" use="optional"/>
+      <xs:attribute type="xs:int" name="y" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="step">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element ref="actions" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute type="xs:int" name="num" use="optional"/>
+      <xs:attribute type="xs:int" name="x" use="optional"/>
+      <xs:attribute type="xs:int" name="y" use="optional"/>
+      <xs:attribute type="xs:string" name="initial" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="transition">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:int" name="num" use="optional"/>
+          <xs:attribute type="xs:int" name="x" use="optional"/>
+          <xs:attribute type="xs:int" name="y" use="optional"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="execute">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:int" name="step" use="optional"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="step2transition">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:int" name="step"/>
+          <xs:attribute type="xs:int" name="transition"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="divergence">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="execute" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute type="xs:int" name="transition"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="convergence">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="execute" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute type="xs:int" name="transition" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="transtion2step">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:int" name="transition"/>
+          <xs:attribute type="xs:int" name="step"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="steps">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded" minOccurs="0">
+        <xs:element ref="step" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="transitions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="transition" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="links">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded" minOccurs="0">
+        <xs:element ref="step2transition"/>
+        <xs:element ref="divergence"/>
+        <xs:element ref="convergence"/>
+        <xs:element ref="transtion2step"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="grafcet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="steps"/>
+        <xs:element ref="transitions"/>
+        <xs:element ref="links"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

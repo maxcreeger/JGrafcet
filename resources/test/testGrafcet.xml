@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<grafcet>
+	<steps>
+		<step num="1" x="2" y="1" initial="true">
+			<actions>
+				<action>Do something</action>
+			</actions>
+		</step>
+		<step num="2" x="1" y="3"/>
+		<step num="3" x="2" y="3"/>
+			<actions>
+				<action>Do some stuff</action>
+				<action>Do more stuff</action>
+			</actions>
+		<step num="4" x="3" y="3"/>
+	</steps>
+	<transitions>
+		<transition num="1" x="1" y="2"/>
+		<transition num="2" x="1" y="4"/>
+		<transition num="3" x="2" y="4"/>
+	</transitions>
+	<links>
+		<step2transition step="1" transition="1"/>
+		<step2transition step="3" transition="3"/>
+		<divergence transition="1">
+			<execute step="2"/>
+			<execute step="3"/>
+			<execute step="4"/>
+		</divergence>
+		<convergence transition="2">
+			<execute step="2"/>
+			<execute step="3"/>
+			<execute step="4"/>
+		</convergence>
+		<step2transition step="2" transition="2"/>
+		<transtion2step transition="2" step="1"/>
+	</links>
+</grafcet>
