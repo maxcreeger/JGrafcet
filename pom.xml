@@ -3,6 +3,12 @@
   <groupId>com.beetlekhi</groupId>
   <artifactId>JGrafcet</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <name>JGrafcet</name>
+  <description>This Package is able to describe and animate a Grafcet</description>
+  <inceptionYear>2018</inceptionYear>
+  <organization>
+  	<name>Beetle Khi</name>
+  </organization>
   <dependencies>
   	<dependency>
 	    <groupId>com.github.vlsi.mxgraph</groupId>
