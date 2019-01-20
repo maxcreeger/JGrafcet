@@ -8,11 +8,12 @@
 			</actions>
 		</step>
 		<step num="2" x="1" y="3"/>
-		<step num="3" x="2" y="3"/>
+		<step num="3" x="2" y="3">
 			<actions>
 				<action>Do some stuff</action>
 				<action>Do more stuff</action>
 			</actions>
+		</step>
 		<step num="4" x="3" y="3"/>
 	</steps>
 	<transitions>

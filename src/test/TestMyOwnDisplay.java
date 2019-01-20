@@ -14,6 +14,8 @@ import jgrafcet.destructured.DGrafcet;
 import jgrafcet.destructured.DGrafcetPainter;
 import jgrafcet.destructured.DStep;
 import jgrafcet.destructured.DTransition;
+import jgrafcet.destructured.GrafcetReader;
+import jgrafcet.destructured.GrafcetReader.GrafcetAndPainter;
 import jgrafcet.engine.Grafcet;
 import jgrafcet.engine.GrafcetDesigner;
 import jgrafcet.engine.GrafcetDesigner.StepBlueprint;
@@ -21,19 +23,17 @@ import jgrafcet.engine.GrafcetDesigner.TransitionBlueprint;
 import jgrafcet.engine.actions.IAction;
 import jgrafcet.engine.actions.NoAction;
 import jgrafcet.engine.signal.AlwaysTrue;
-import parsing.GrafcetReader;
-import parsing.GrafcetReader.GrafcetAndPainter;
 
-public class TestGrafcet {
+public class TestMyOwnDisplay {
 
 	public static void main(String[] arg) throws InterruptedException, JAXBException {
 		testLoadXML();
-		//testOrDivergence();
-		//testDestructured();
+		testOrDivergence();
+		testDestructured();
 	}
 
 	public static void testLoadXML() throws JAXBException, InterruptedException {
-		GrafcetAndPainter bundle = GrafcetReader.build(new File("F:\\workspace\\JGrafcet\\resources\\test\\testGrafcet.xml"));
+		GrafcetAndPainter bundle = GrafcetReader.build(new File("C:\\Users\\Marmotte\\Git\\JGrafcet\\resources\\test\\testGrafcet.xml"));
 		displayInFrame(bundle.getPainter());
 	}
 
@@ -76,6 +76,8 @@ public class TestGrafcet {
 		// Make frame
 		JFrame frame = new JFrame("test");
 		JPanel display = new JPanel() {
+
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void paint(Graphics g) {
@@ -129,36 +131,28 @@ public class TestGrafcet {
 	 */
 	private static void testOrDivergence() throws InterruptedException {
 		GrafcetDesigner grafcetDesigner = new GrafcetDesigner();
-		StepBlueprint step1 = grafcetDesigner.newInitialStep(1)
-												.withAction(new NoAction("action01"));
-		StepBlueprint step2 = grafcetDesigner.newStep(2)
-												.withAction(new NoAction("action02"));
-		StepBlueprint step3 = grafcetDesigner.newStep(3)
-												.withAction(new NoAction("action03"));
-		StepBlueprint step4 = grafcetDesigner.newStep(4)
-												.withAction(new NoAction("action04"));
+		StepBlueprint step1 = grafcetDesigner.newInitialStep(1).withAction(new NoAction("action01"));
+		StepBlueprint step2 = grafcetDesigner.newStep(2).withAction(new NoAction("action02"));
+		StepBlueprint step3 = grafcetDesigner.newStep(3).withAction(new NoAction("action03"));
+		StepBlueprint step4 = grafcetDesigner.newStep(4).withAction(new NoAction("action04"));
 		// tran 1
-		TransitionBlueprint tran01 = grafcetDesigner.newTransition(1)
-													.withCondition(new AlwaysTrue());
-		grafcetDesigner.linkStep(step1)
-						.to(tran01);
-		grafcetDesigner.whenTransitionFires(tran01)
-						.activateAll(step2, step3, step4);
+		TransitionBlueprint tran01 = grafcetDesigner.newTransition(1).withCondition(new AlwaysTrue());
+		grafcetDesigner.linkStep(step1).to(tran01);
+		grafcetDesigner.whenTransitionFires(tran01).activateAll(step2, step3, step4);
 
 		//tran 2
-		TransitionBlueprint trans02 = grafcetDesigner.newTransition(2)
-														.withCondition(new AlwaysTrue());
-		grafcetDesigner.linkStep(step2)
-						.to(trans02);
+		TransitionBlueprint trans02 = grafcetDesigner.newTransition(2).withCondition(new AlwaysTrue());
+		grafcetDesigner.linkStep(step2).to(trans02);
 
 		// Tran 3
-		TransitionBlueprint trans03 = grafcetDesigner.newTransition(3)
-														.withCondition(new AlwaysTrue());
-		grafcetDesigner.clearAllSteps(step2, step3, step4)
-						.whenFires(trans03);
+		TransitionBlueprint trans03 = grafcetDesigner.newTransition(3).withCondition(new AlwaysTrue());
+		grafcetDesigner.clearAllSteps(step2, step3, step4).whenFires(trans03);
 
 		// Build
 		Grafcet grafcet = grafcetDesigner.build();
+
+		// Execute
+		grafcet.iterate();
 
 		// Setup graph display
 		/*GrafcetDisplay display = new GrafcetDisplay(grafcet);
@@ -166,7 +160,7 @@ public class TestGrafcet {
 		display.setLocation(step2, 10, 14);
 		display.setLocation(step3, 12, 14);
 		display.setLocation(step4, 14, 14);
-
+		
 		// Make frame
 		JFrame frame = new JFrame("test");
 		frame.add(display);
@@ -175,13 +169,13 @@ public class TestGrafcet {
 		frame.setVisible(true);
 		new GrafcetDesigner().newInitialStep(0)
 								.withAction(null);
-
+		
 		while (true) {
 			System.out.println("----------------------------------");
 			Thread.sleep(5000);
 			grafcet.iterate();
 			SwingUtilities.invokeLater(new Runnable() {
-
+		
 				@Override
 				public void run() {
 					frame.repaint();

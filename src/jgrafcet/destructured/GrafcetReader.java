@@ -1,24 +1,29 @@
-package parsing;
+package jgrafcet.destructured;
 
 import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import jgrafcet.destructured.DGrafcet;
-import jgrafcet.destructured.DGrafcetPainter;
-import jgrafcet.destructured.DStep;
-import jgrafcet.destructured.DTransition;
 import jgrafcet.engine.actions.IAction;
 import jgrafcet.engine.signal.AlwaysTrue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import parsing.Convergence;
+import parsing.Divergence;
+import parsing.Execute;
+import parsing.Grafcet;
+import parsing.Links;
+import parsing.Step;
+import parsing.Step2Transition;
+import parsing.Steps;
+import parsing.Transition;
+import parsing.Transitions;
+import parsing.Transtion2Step;
 
 public class GrafcetReader {
 
@@ -52,17 +57,12 @@ public class GrafcetReader {
 		Steps stepsDAO = grafcetDAO.getSteps();
 		for (Step stepDAO : stepsDAO.getStep()) {
 
-			List<String> allActions = stepDAO.getContent()
-												.stream()
-												.map(displayAction())
-												.collect(Collectors.toList());
+			List<String> allActions = stepDAO.getActions() == null ? new ArrayList<>() : stepDAO.getActions().getAction();
 			IAction[] actionArray = new IAction[allActions.size()];
 			for (int i = 0; i < allActions.size(); i++) {
 				actionArray[i] = new SpecialAction("Performing " + allActions.get(i));
 			}
-			boolean isInitial = stepDAO.getInitial() != null && stepDAO.getInitial()
-																		.equals("true");
-			DStep dStep = new DStep(isInitial, stepDAO.getNum(), actionArray);
+			DStep dStep = new DStep(stepDAO.isInitial(), stepDAO.getNum(), actionArray);
 			dSteps.add(dStep);
 			dGrafcet.add(dStep);
 			painter.setLocation(dStep, new Point(stepDAO.getX(), stepDAO.getY()));
@@ -113,22 +113,6 @@ public class GrafcetReader {
 		}
 
 		return new GrafcetAndPainter(dGrafcet, painter);
-	}
-
-	protected static Function<? super Object, ? extends String> displayAction() {
-		return actions -> {
-			if (actions instanceof String) {
-				return (String) actions;
-			} else if (actions instanceof Actions) {
-				StringBuilder builder = new StringBuilder();
-				((Actions) actions).getContent()
-									.stream()
-									.forEach(action -> builder.append(action.toString()));
-				return builder.toString();
-			} else {
-				return "";
-			}
-		};
 	}
 
 	protected static Grafcet read(File file) throws JAXBException {
