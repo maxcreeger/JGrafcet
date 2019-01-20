@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 /bin/
 /.classpath
 /.project
 /target/
+=======
+/.project
+/.classpath
+/target/
+/bin/
+>>>>>>> branch 'master' of https://github.com/maxcreeger/JGrafcet.git
