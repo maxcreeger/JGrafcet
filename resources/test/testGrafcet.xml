@@ -17,24 +17,28 @@
 		<step num="4" x="3" y="3"/>
 	</steps>
 	<transitions>
-		<transition num="1" x="1" y="2"/>
-		<transition num="2" x="1" y="4"/>
-		<transition num="3" x="2" y="4"/>
+		<transition num="1" x="1" y="2">
+			<required-steps>
+				<required step="1"/>
+			</required-steps>
+			<executed-steps>
+				<executed step="2"/>
+				<executed step="3"/>
+				<executed step="4"/>
+			</executed-steps>
+		</transition>
+		<transition num="2" x="1" y="4">
+			<required-steps>
+				<required step="2"/>
+			</required-steps>
+			<executed-steps>
+				<executed step="1"/>
+			</executed-steps>
+		</transition>
+		<transition num="3" x="2" y="4">
+			<required-steps>
+				<required step="3"/>
+			</required-steps>
+		</transition>
 	</transitions>
-	<links>
-		<step2transition step="1" transition="1"/>
-		<step2transition step="3" transition="3"/>
-		<divergence transition="1">
-			<execute step="2"/>
-			<execute step="3"/>
-			<execute step="4"/>
-		</divergence>
-		<convergence transition="2">
-			<execute step="2"/>
-			<execute step="3"/>
-			<execute step="4"/>
-		</convergence>
-		<step2transition step="2" transition="2"/>
-		<transtion2step transition="2" step="1"/>
-	</links>
 </grafcet>

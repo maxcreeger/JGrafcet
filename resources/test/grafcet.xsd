@@ -33,8 +33,37 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="executed">
+    <xs:complexType>
+      <xs:attribute type="xs:int" name="step" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="required">
+    <xs:complexType>
+      <xs:attribute type="xs:int" name="step" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="required-steps">
+    <xs:complexType mixed="false">
+      <!-- Use Identifiers with key/keyref see https://www.w3.org/TR/xmlschema-1/#cIdentity-constraint_Definitions -->
+      <xs:sequence>
+        <xs:element ref="required" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="executed-steps">
+    <xs:complexType mixed="false">
+      <xs:sequence>
+        <xs:element ref="executed" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="transition">
     <xs:complexType mixed="false">
+      <xs:sequence>
+        <xs:element ref="required-steps"  maxOccurs="1" minOccurs="0"/>
+        <xs:element ref="executed-steps"  maxOccurs="1" minOccurs="0"/>
+      </xs:sequence>
       <xs:attribute type="xs:int" name="num" use="optional"/>
       <xs:attribute type="xs:int" name="x" use="optional"/>
       <xs:attribute type="xs:int" name="y" use="optional"/>
@@ -48,57 +77,11 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="execute">
-    <xs:complexType>
-      <xs:attribute type="xs:int" name="step" use="optional"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="step2transition">
-    <xs:complexType>
-      <!-- Use Identifiers with key/keyref see https://www.w3.org/TR/xmlschema-1/#cIdentity-constraint_Definitions -->
-      <xs:attribute type="xs:int" name="step"/>
-      <xs:attribute type="xs:int" name="transition"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="transtion2step">
-    <xs:complexType>
-      <!-- Use Identifiers with key/keyref see https://www.w3.org/TR/xmlschema-1/#cIdentity-constraint_Definitions -->
-      <xs:attribute type="xs:int" name="transition"/>
-      <xs:attribute type="xs:int" name="step"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="divergence">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="execute" maxOccurs="unbounded" minOccurs="1"/>
-      </xs:sequence>
-      <xs:attribute type="xs:int" name="transition"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="convergence">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="execute" maxOccurs="unbounded" minOccurs="1"/>
-      </xs:sequence>
-      <xs:attribute type="xs:int" name="transition" use="optional"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="links">
-    <xs:complexType>
-      <xs:choice maxOccurs="unbounded" minOccurs="1">
-        <xs:element ref="step2transition"/>
-        <xs:element ref="divergence"/>
-        <xs:element ref="convergence"/>
-        <xs:element ref="transtion2step"/>
-      </xs:choice>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="grafcet">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="steps"/>
-        <xs:element ref="transitions"/>
-        <xs:element ref="links"/>
+        <xs:element ref="steps" maxOccurs="1" minOccurs="1"/>
+        <xs:element ref="transitions" maxOccurs="1" minOccurs="1"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
