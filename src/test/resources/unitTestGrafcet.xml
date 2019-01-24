@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <grafcet>
+	<variables>
+		<variable type="integer" name="x" initial="0"/>
+	</variables>
+	<signals>
+		<signal type="boolean" name="start" initial="false"/>
+	</signals>
 	<steps>
 		<step num="1" x="2" y="1" initial="true">
 			<actions>
@@ -21,6 +27,16 @@
 			<required-steps>
 				<required step="1"/>
 			</required-steps>
+			<condition op="band">
+				<left op="variable" value="x"/>
+				<right op="bor">
+					<left op="step" value="2"/>
+					<right op="band">
+						<left op="variable" value="x"/>
+						<right op="true"/>
+					</right>
+				</right>
+			</condition>
 			<executed-steps>
 				<executed step="2"/>
 				<executed step="3"/>
@@ -37,7 +53,9 @@
 		</transition>
 		<transition num="3" x="2" y="4">
 			<required-steps>
+				<required step="2"/>
 				<required step="3"/>
+				<required step="4"/>
 			</required-steps>
 		</transition>
 	</transitions>

@@ -1,0 +1,131 @@
+<xs:schema attributeFormDefault="unqualified"
+	elementFormDefault="qualified"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	
+	<xs:element name="variable">
+		<xs:complexType>
+			<xs:attribute type="xs:string" name="type" use="required" />
+			<xs:attribute type="xs:string" name="name" use="required" />
+			<xs:attribute type="xs:string" name="initial" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="variables">
+		<xs:complexType mixed="false">
+			<xs:sequence>
+				<xs:element ref="variable" maxOccurs="unbounded" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="signal">
+		<xs:complexType>
+			<xs:attribute type="xs:string" name="type" use="required" />
+			<xs:attribute type="xs:string" name="name" use="required" />
+			<xs:attribute type="xs:string" name="initial" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="signals">
+		<xs:complexType mixed="false">
+			<xs:sequence>
+				<xs:element ref="signal" maxOccurs="unbounded" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="action" type="xs:string" />
+	<xs:element name="actions">
+		<xs:complexType mixed="false">
+			<xs:sequence>
+				<xs:element ref="action" maxOccurs="unbounded" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="step">
+		<!-- TODO add unicity to step num ex for <group name="1"> <xs:unique name="uniqueGroupName"> 
+			<xs:selector xpath="group"/> <xs:field xpath="@name"/> </xs:unique> -->
+		<xs:complexType mixed="false">
+			<xs:sequence>
+				<xs:element ref="actions" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
+			<xs:attribute type="xs:int" name="num" use="optional" />
+			<xs:attribute type="xs:int" name="x" use="optional" />
+			<xs:attribute type="xs:int" name="y" use="optional" />
+			<xs:attribute type="xs:boolean" name="initial" use="optional" default="false" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="steps">
+		<xs:complexType mixed="false">
+			<xs:sequence>
+				<xs:element ref="step" maxOccurs="unbounded" minOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:complexType name="expression">
+        <xs:sequence>
+			<xs:element ref="left" maxOccurs="1" minOccurs="1"/>
+			<xs:element ref="right" maxOccurs="1" minOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute type="xs:string" name="op" use="required"/>
+		<xs:attribute type="xs:string" name="value" use="optional"/>
+	</xs:complexType>
+	<xs:element name="left" type="expression"/>
+	<xs:element name="right" type="expression"/>
+	<xs:element name="condition" type="expression"/>
+	
+	<xs:element name="executed">
+		<xs:complexType>
+			<xs:attribute type="xs:int" name="step" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="required">
+		<xs:complexType>
+			<xs:attribute type="xs:int" name="step" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="required-steps">
+		<xs:complexType mixed="false">
+			<!-- Use Identifiers with key/keyref see https://www.w3.org/TR/xmlschema-1/#cIdentity-constraint_Definitions -->
+			<xs:sequence>
+				<xs:element ref="required" maxOccurs="unbounded" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="executed-steps">
+		<xs:complexType mixed="false">
+			<xs:sequence>
+				<xs:element ref="executed" maxOccurs="unbounded" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="transition">
+		<xs:complexType mixed="false">
+			<xs:sequence>
+				<xs:element ref="required-steps" maxOccurs="1" minOccurs="0" />
+				<xs:element ref="condition" maxOccurs="1" minOccurs="1" />
+				<xs:element ref="executed-steps" maxOccurs="1" minOccurs="0" />
+			</xs:sequence>
+			<xs:attribute type="xs:int" name="num" use="optional" />
+			<xs:attribute type="xs:int" name="x" use="optional" />
+			<xs:attribute type="xs:int" name="y" use="optional" />
+			<!-- TODO: Add transition condition element -->
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="transitions">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="transition" maxOccurs="unbounded" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="grafcet">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="variables" maxOccurs="1" minOccurs="1" />
+				<xs:element ref="signals" maxOccurs="1" minOccurs="1" />
+				<xs:element ref="steps" maxOccurs="1" minOccurs="1" />
+				<xs:element ref="transitions" maxOccurs="1" minOccurs="1" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
